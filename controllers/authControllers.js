@@ -115,6 +115,11 @@ export const googleAuth = async(req, res) => {
       return res.json({user,token,expiresIn:Date.now()+60*24*1000*60})
     }
 
+    const userExist = await User.findOne({email:email,google:false})
+    if(userExist){
+      return res.status(500).json({message:"User already exist"})
+    }
+
     const newUser = new User({
       username: name,
       email: email,
